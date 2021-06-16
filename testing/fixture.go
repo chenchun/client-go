@@ -22,6 +22,7 @@ import (
 	"sync"
 
 	jsonpatch "github.com/evanphx/json-patch"
+	"k8s.io/klog"
 
 	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/api/meta"
@@ -32,6 +33,7 @@ import (
 	"k8s.io/apimachinery/pkg/util/json"
 	"k8s.io/apimachinery/pkg/util/strategicpatch"
 	"k8s.io/apimachinery/pkg/watch"
+
 	restclient "k8s.io/client-go/rest"
 )
 
@@ -470,6 +472,7 @@ func (t *tracker) Delete(gvr schema.GroupVersionResource, ns, name string) error
 			for _, w := range t.getWatches(gvr, ns) {
 				w.Delete(obj)
 			}
+			klog.Infof("delete object %s/%s %s", objMeta.GetNamespace(), objMeta.GetName(), objMeta.GetUID())
 			found = true
 			break
 		}
