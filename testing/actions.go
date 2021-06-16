@@ -584,6 +584,7 @@ func (a PatchActionImpl) DeepCopy() Action {
 type DeleteActionImpl struct {
 	ActionImpl
 	Name string
+	DeleteOptions *metav1.DeleteOptions
 }
 
 func (a DeleteActionImpl) GetName() string {
@@ -594,7 +595,13 @@ func (a DeleteActionImpl) DeepCopy() Action {
 	return DeleteActionImpl{
 		ActionImpl: a.ActionImpl.DeepCopy().(ActionImpl),
 		Name:       a.Name,
+		DeleteOptions: a.DeleteOptions.DeepCopy(),
 	}
+}
+
+func (a *DeleteActionImpl) WithDeleteOptions(deleteOptions *metav1.DeleteOptions) DeleteActionImpl {
+	a.DeleteOptions = deleteOptions
+	return *a
 }
 
 type DeleteCollectionActionImpl struct {
