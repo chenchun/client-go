@@ -116,8 +116,10 @@ func (c *FakePods) UpdateStatus(ctx context.Context, pod *corev1.Pod, opts v1.Up
 
 // Delete takes name of the pod and deletes it. Returns an error if one occurs.
 func (c *FakePods) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
+	deleteAction := testing.NewDeleteAction(podsResource, c.ns, name)
+	deleteAction.DeleteOptions = &opts
 	_, err := c.Fake.
-		Invokes(testing.NewDeleteAction(podsResource, c.ns, name), &corev1.Pod{})
+		Invokes(deleteAction, &corev1.Pod{})
 
 	return err
 }
