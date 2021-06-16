@@ -240,12 +240,13 @@ func NewRootDeleteSubresourceAction(resource schema.GroupVersionResource, subres
 	return action
 }
 
-func NewDeleteAction(resource schema.GroupVersionResource, namespace, name string) DeleteActionImpl {
+func NewDeleteAction(resource schema.GroupVersionResource, namespace, name string, opts *metav1.DeleteOptions) DeleteActionImpl {
 	action := DeleteActionImpl{}
 	action.Verb = "delete"
 	action.Resource = resource
 	action.Namespace = namespace
 	action.Name = name
+	action.DeleteOptions = opts
 
 	return action
 }
@@ -584,6 +585,7 @@ func (a PatchActionImpl) DeepCopy() Action {
 type DeleteActionImpl struct {
 	ActionImpl
 	Name string
+	DeleteOptions *metav1.DeleteOptions
 }
 
 func (a DeleteActionImpl) GetName() string {
@@ -594,6 +596,7 @@ func (a DeleteActionImpl) DeepCopy() Action {
 	return DeleteActionImpl{
 		ActionImpl: a.ActionImpl.DeepCopy().(ActionImpl),
 		Name:       a.Name,
+		DeleteOptions: a.DeleteOptions.DeepCopy(),
 	}
 }
 
