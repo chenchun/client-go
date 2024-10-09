@@ -17,6 +17,7 @@ limitations under the License.
 package workqueue
 
 import (
+	"runtime/debug"
 	"sync"
 	"time"
 
@@ -222,6 +223,7 @@ type queueMetricsFactory struct {
 
 func (f *queueMetricsFactory) setProvider(mp MetricsProvider) {
 	f.onlyOnce.Do(func() {
+		debug.PrintStack()
 		f.metricsProvider = mp
 	})
 }
